@@ -1,0 +1,255 @@
+---
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+params:
+  meta.data: ''
+  date: ''
+  data: ''
+  all.res: ''
+  ordination.plot: NULL
+  primary.plot: NULL
+  corrmax.plot: NULL
+  is.preview: F
+  output.dir: ''
+---
+
+```{r base_info_and_libraries, echo=FALSE,message=FALSE}
+library(pander)
+library(abind)
+
+write.out <- T
+
+output.dir <- params$output.dir
+
+preview <- params$is.preview
+
+me <- params$meta.data$name
+
+this.date <- params$date
+
+this.data <- params$data
+
+this.title <- params$meta.data$title
+if(this.title == '') {
+  this.title <- paste0("Outliers Summary Report")
+}
+
+this.subtitle <- params$meta.data$subtitle
+
+show_gmcd <- show_mcd <- show_mcd.error <- F
+if(params$meta.data$mcd.path){
+  if(params$meta.data$continuous){
+    show_mcd <- T
+  }else {
+    show_gmcd <- T
+  }
+}else{
+  show_mcd.error <- T
+}
+
+show_pca <- show_ca <- show_ord.error <- F
+if(params$meta.data$continuous){
+  show_pca <- T
+}else{
+  show_ca <- T
+}
+
+```
+
+---
+title: "`r this.title`"
+subtitle: "`r this.subtitle`"
+author: "`r me`"
+date: "`r this.date`"
+---
+
+
+# Overview of Analyses
+
+
+## Variables included in analysis
+
+These analyses were performed on `r params$meta.data$data.name`, and included the following variables: 
+
+`r paste(unlist(colnames(params$data)), collapse="\t")`.
+
+## Ordination analyses
+
+`r if(show_pca){"Principal components analysis (PCA) is a multivariate technique for matrices where, typically, rows are observations and columns are measures/variables. PCA is applied, generally, to data assumed to be continuous. PCA produces orthogonal components that are rank-ordered by their explained variance. From the PCA, each observation is assigned a score \\textit{per component} called a component score. Here, we use the singular vectors associated with the observations. Singular vectors have a mean of 0 and a norm of 1 (i.e., unity). Component scores reflect how much variance observations contribute to components (very close to zero is little variance, very far from zero is a lot of variance). The further an observation is from zero, the more likely they contribute a high amount of variance or are an outlier."}`
+
+`r if(show_ca){"Correspondence analysis (CA) is a multivariate technique akin to principal components analyses, but designed for data that are generally non-negative (i.e., categorical, ordinal, contingency). Here CA is applied to a matrix with observations on the rows and measures/variables on the columns. CA produces orthogonal components that are rank-ordered by their explained variance. From the CA, each observation is assigned a score \\textit{per component} called a component score. Here, we use the singular vectors associated with the observations. Singular vectors have a mean of 0 and a norm of 1 (i.e., unity). Component scores reflect how much variance observations contribute to components (very close to zero is little variance, very far from zero is a lot of variance). The further an observation is from zero, the more likely they contribute a high amount of variance or are an outlier."}`
+
+`r if(show_ord.error){"ERROR: Unrecognized ordination type."}`
+
+Ordination analyses are used as a supplement to the outlier analyses as it has been shown that ordination techniques (e.g., principal components, or correspondence analysis) can highlight outliers in one of two ways: (1) distant individuals on the first two components or (2) distant individuals on the last two components. Simple ordination techniques can help identify individuals and possible reasons why. 
+
+## Multivariate outlier analyses
+
+These analyses are conducted in three stages to identify outliers and sources of their outlierness as follows:
+
+`r if(show_mcd){"1.  The minimum covariance determinant (MCD) technique was used to find the subset of observations with the smallest amount of scatter (i.e., smallest determinant) on data that were assumed to be strictly continuous, and thus each column was centered and/or z-scored,"}`
+
+`r if(show_gmcd){"1.  The generalized minimum covariance determinant (GMCD) technique was used to find the subset of observations with the smallest amount of scatter (i.e., smallest determinant) on data that that were not strictly continuous (e.g., categorical, ordinal, counts, or mixtures of these and continuous), and preprocessed under the assumptions of CA (just as above in ordination),"}`
+
+
+2.  bootstrap resampling to identify which individuals are routlinely identified as outliers,
+
+
+`r if(show_mcd){"3.  The CorrMax transformation to find potential sources (i.e., variables) of outlierness for each outlier; under the same preprocessing as in step 1"}`
+
+`r if(show_gmcd){"3.  The generalized CorrMax transformation to find potential sources (i.e., variables) of outlierness for each outlier; under the same preprocessing as in step 1"}`
+
+<!-- DB: we don't use iterations anymore -->
+<!-- The results are from an aggregate over the course of `r params$meta.data$mcd.iterations` iterations of the MCD + bootstrap + CorrMax procedure. -->
+
+Through this stages and based on the user selected thresholds, individuals could be identified as: inliers, outliers on standard Mahalanobis distance, outliers on robust Mahalanobis distance, or outliers on both standard and robust Mahalanobis distances. Outliers are the most unique cases and it is essential to look into these individuals. It is strongly recommended to also inspect all types of outliers---especially those for "both". 
+
+
+For additional background on the MCD algorithm and CorrMax procedures see Hubert et al., (2010) and (), respectively. For an overview of the ONDRI outlier process see Sunderland et al., (2019). For the generalized extension of the MCD (with some of the background for generalized CorrMax), as well as bootstrapping see  Beaton et al., (2018).
+
+
+``` {r,echo=FALSE, results="asis"}
+analyses.description.table <- cbind(
+  paste(params$all.res$data.nrow, params$all.res$data.ncol, sep = ", "),
+  params$meta.data$mcd.iterations,
+  paste0(params$meta.data$mcd.threshold*100, "%"),
+  paste0(params$meta.data$corrmax.threshold, "%"),
+  params$meta.data$bootstrap.iterations,
+  paste0(params$meta.data$bootstrap.threshold.robust*100, "%"),
+  paste0(params$meta.data$bootstrap.threshold.standard*100, "%")
+)
+
+
+colnames(analyses.description.table) <- c("n, p","MCD iterations","MCD threshold","CorrMax threshold","Bootstrap Iterations", "Robust Bootstrap threshold", "Standard Bootstrap threshold")
+rownames(analyses.description.table) <- c("Analysis")
+
+# producing the table
+pandoc.table(analyses.description.table,split.cells=10,keep.line.breaks=T,caption="Multivariate outlier analyses performed")
+```
+
+# Results
+
+## Ordination analyses
+```{r,echo=FALSE, fig.height=8, results="asis"}
+params$ordination.plot
+```
+
+Ordination analysis results. The first two components explain the most variance and show individuals that contribute a large amount of overall variance. The last two components explain the least variance but importantly show both variables that are generally orthogonal and individuals that are outliers because of those variables.
+
+
+## `r if(show_gmcd) {"G"}`MCD analyses
+
+
+```{r, echo=FALSE, results="asis"}
+
+if(!is.null(params$primary.plot)){
+
+  outliers.design <- params$all.res$mcd.results$outliers.design
+  outliers.sums <- colSums(outliers.design)
+  outliers.sums["Robust"] <- outliers.sums["Robust"] - outliers.sums["Both"]
+  outliers.sums["Standard"] <- outliers.sums["Standard"] - outliers.sums["Both"]
+  
+  liers.table <- cbind(outliers.sums,(outliers.sums/params$all.res$data.nrow)*100)
+  colnames(liers.table) <- c("N","%")
+  
+  pandoc.table(liers.table,split.cells=10,keep.line.breaks=T,caption=sprintf("%s - outlier categories", paste(params$meta.data$data.name)), round=2)
+}
+```
+
+```{r,echo=FALSE, fig.height=6, results="asis"}
+if (is.null(params$meta.data$primary.plot.skip)) {
+  params$primary.plot
+}
+```
+`r if(!is.null(params$meta.data$primary.plot.skip)) {params$meta.data$primary.plot.skip}`
+
+## `r if(show_gmcd) {"G"}`CorrMax analyses
+```{r,echo=FALSE, fig.height=10, fig.width=8, results="asis"}
+if (is.null(params$meta.data$corrmax.plot.skip)) {
+  params$corrmax.plot
+}
+```
+`r if(!is.null(params$meta.data$corrmax.plot.skip)) {params$meta.data$corrmax.plot.skip}`
+
+```{r echo=F}
+if(!preview && !is.null(params$primary.plot)) {
+  all.res <- params$all.res
+  mcd.results <- all.res$mcd.results
+  rob.md <- mcd.results$dists$robust_mahal_dists
+  stand.md <- mcd.results$dists$mahal_dists
+  md.scores <- sqrt(cbind(stand.md, rob.md)) # store mcd outliers
+  rownames(md.scores) <- rownames(params$data, do.NULL = F, prefix = "SUBJECT_") # add rownames if non exist
+  corrmax.res <- all.res$corrmax.res$percentage_contributions
+  rownames(corrmax.res) <- rownames(md.scores) # make rownames consistent with mcd outliers
+  
+  outliers.design.reordered <- outliers.design
+  rownames(outliers.design.reordered) <- rownames(md.scores) # make rownames consistent with mcd outliers
+  
+  # reorder corrmax results in decreasing order of robust values (same for the outlier/variable ranking tables)
+  corrmax.rob_reordered <- corrmax.res[order(md.scores[, "rob.md"],decreasing = T),]
+  corrmax.stand_reordered <- corrmax.res[order(md.scores[, "rob.md"],decreasing = T),]
+  outliers.design.reordered <- outliers.design.reordered[rownames(corrmax.rob_reordered), ]
+  
+  # remove corrmax results under the neither category
+  corrmax.rob_reordered_drop <- corrmax.rob_reordered[-c(which(outliers.design.reordered[rownames(corrmax.rob_reordered),"Neither"]==1)), , drop = F]
+  corrmax.stand_reordered_drop <- corrmax.stand_reordered[-c(which(outliers.design.reordered[rownames(corrmax.stand_reordered),"Neither"]==1)), , drop = F]
+  # fill outlier ranking table and reorder on Both decreasing
+  outlier.ranks <- cbind(round(md.scores[rownames(corrmax.rob_reordered_drop), "rob.md", drop = F],digits=2), round(md.scores[rownames(corrmax.stand_reordered_drop), "stand.md", drop = F],digits=2), outliers.design.reordered[rownames(corrmax.rob_reordered_drop), c("Both", "Robust", "Standard"), drop = F])
+
+  outlier.ranks <- outlier.ranks[order(outlier.ranks[,"Both"], decreasing = T), , drop = F]
+
+  colnames(outlier.ranks)[1] <- "Sqrt Robust MD"
+  colnames(outlier.ranks)[2] <- "Sqrt Standard MD"
+  outlier.ranks[,c("Both", "Robust", "Standard")] <- ifelse(outlier.ranks[,c("Both", "Robust", "Standard")]==1,"YES","")
+
+  # sort by variable ranking
+  corrmax.rob_reordered_drop <- corrmax.rob_reordered_drop[rownames(outlier.ranks), , drop = F]
+  # Between this line and line 222 are unchecked for bugs when there is only a single outlier
+  top.contributions.per.obs <- plyr::alply(corrmax.rob_reordered_drop,1,function(i){sort(i[which(i >= params$meta.data$corrmax.threshold), drop = F],decreasing=T)})
+  names(top.contributions.per.obs) <- row.names(corrmax.rob_reordered_drop)
+  # bind variable ranking 
+  output.temp <- lapply(top.contributions.per.obs,function(i){data.frame(VARIABLE=names(i),MAXIMUM_PROPORTION=i)})
+  output.structure <- do.call("rbind",output.temp)
+  output.structure$SUBJECT <- rep(names(output.temp),unlist(lapply(output.temp,nrow)))
+  rownames(output.structure) <- NULL
+  ## cleanup
+  rm(output.temp)
+  output.structure <- output.structure[,c("SUBJECT","MAXIMUM_PROPORTION","VARIABLE")]
+  output.structure$MAXIMUM_PROPORTION <- round(output.structure$MAXIMUM_PROPORTION,digits = 2)
+  output.structure$VARIABLE <- gsub("^\\.","",output.structure$VARIABLE)
+  
+  # output outlier/variable ranking
+  if(write.out){
+    write.csv(output.structure,
+              paste0(output.dir, "/", params$meta.data$data.name,"_NIBS_OUTL_VariableRanking_",this.date,".csv"
+              ),row.names = F)
+    
+    
+    write.csv(outlier.ranks,
+              paste0(output.dir, "/", params$meta.data$data.name,"_NIBS_OUTL_OutlierRanking_",this.date,".csv"
+              ),row.names = T)
+    
+  }
+}
+```
+
+```{r echo=F}
+# Additional Information
+
+#r params$meta.data$custom.descriptor
+```
+
+# References
+
+Beaton, D., Sunderland, K. M., Levine, B., Mandzia, J., Masellis, M., Swartz, R. H., ... & Strother, S. C. (2019). Generalization of the minimum covariance determinant algorithm for categorical and mixed data types. bioRxiv, 333005.
+
+Garthwaite, P. H., & Koch, I. (2016). Evaluating the contributions of individual variables to a quadratic form. Australian & New Zealand journal of statistics, 58(1), 99-119.
+
+Hubert, M., & Debruyne, M. (2010). Minimum covariance determinant. Wiley Interdisciplinary Reviews: Computational Statistics, 2 (1), 36–43.
+
+Sunderland, K. M., Beaton, D., Fraser, J., Kwan, D., McLaughlin, P. M., Montero-Odasso, M., ... & Strother, S. C. (2019). The utility of multivariate outlier detection techniques for data quality evaluation in large studies: an application within the ONDRI project. BMC medical research methodology, 19(1), 102.
+
+
+<!-- We should use something that dynamically updates based on a .bib file or something but we don't need that just yet -->

@@ -1,0 +1,46 @@
+Package: ONDRIOutliersApp
+Title: ONDRI Outliers ShinyApp
+Version: 0.10.2.9001
+Authors@R: c(
+    person(given = "Jeremy",
+           family = "Tanuan",
+           role = c("aut"),
+           email = "jtanuan@research.baycrest.org"),
+    person(given = "Logan",
+           family = "Lim",
+           role = c("aut"),
+           email = "llim@research.baycrest.org"),
+    person(given = "Jedid",
+           family = "Ahn",
+           role = c("ctb"),
+           email = "jahn@research.baycrest.org"),
+    person(given = "Derek",
+           family = "Beaton",
+           role = c("aut", "cre"),
+           email = "dbeaton@research.baycrest.org"))
+Description: A Shiny app for the ONDRI outlier detection pipeline which includes key visualization, interactivity, and report generation.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Depends: R (>= 2.10)
+Imports: 
+    remotes,
+    shiny,
+    shinyFiles,
+    shinyjs,
+    plotly,
+    rmarkdown,
+    markdown,
+    knitr,
+    corrplot,
+    pander,
+    abind,
+    stringr,
+    viridis,
+    pheatmap,
+    GSVD,
+    ours,
+    fs,
+    grDevices,
+    graphics

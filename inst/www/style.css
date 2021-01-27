@@ -1,0 +1,225 @@
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  background-color: whitesmoke;
+}
+
+.ondri-logo{
+  width: 270px;
+  height: 100px;
+}
+
+
+/* Styling all tabs */
+  .tabbable > .nav > li[class=active] > a {
+    border-top: 3px solid #428BCA;
+    color: #428BCA;
+      background-color: whitesmoke;
+  }
+
+/* Styling active tab only */
+  .tabbable > .nav > li > a {
+    font-weight: bold;
+  }
+
+
+/* Sidebar panel on left side */
+  .input-section{
+    height: 61vh;
+    overflow-y: auto;
+    background-color: white;
+    border-top: 3px solid #428BCA;
+  }
+
+
+/* Styling select button in select folder tab. */
+#downloadFolder{
+  font-size: 16px;
+}
+
+/* Styling folder path output box. */
+#downloadFolderPath{
+  font-size: 15px;
+}
+
+
+/* Styling dropdown box */
+  .selectize-control{
+    font-size: 14px;
+    word-break: break-all;
+  }
+
+/* Dropdown, active selection */
+  .item {
+    color: #4C4C4C;
+  }
+
+/* Dropdown, all possible selections */
+  .selectize-dropdown-content{
+    color: #4C4C4C;
+  }
+
+/* Styling checkbox input */
+  .checkbox{
+    font-size: 14px;
+    color: #4C4C4C;
+      height: 10px;
+    margin-left: 10px;
+  }
+
+/* Checkbox buttons */
+  .select-button{
+    float: left;
+  }
+
+.deselect-button{
+  float: right;
+}
+
+
+/* Styling static progress bar. */
+  .progress{
+    background-color: white;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+/* Styling active progress bar. */
+  .progress-bar{
+    background-color: lightgreen;
+  }
+
+
+/* Main panel on right side for select folder tab. */
+  .file-section{
+    height: 53vh;
+    border: 1px solid silver;
+    overflow-y: auto;
+    background-color: white;
+  }
+
+.subtitle{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Text in panel */
+  .file-list-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    margin: 15px;
+    line-height: 1;
+  }
+
+.valid{
+  color: green;
+}
+
+.invalid{
+  color: red;
+}
+
+
+/* Main panel on right side */
+  .output-section{
+    height: 52vh;
+    border: 1px solid silver;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    background-color: white;
+  }
+
+/* Text in main panel */
+  .output-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #4C4C4C;
+      margin: 15px;
+  }
+
+/* Checkmark photo */
+  .checkmark{
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+    float: left;
+  }
+
+/* Smiley photo */
+  .smiley{
+    width: 45px;
+    height: 45px;
+    margin-top: 10px;
+    margin-right: 7px;
+  }
+
+/* Caution photo */
+  .caution{
+    width: 45px;
+    height: 45px;
+    margin-top: 10px;
+    margin-right: 7px;
+  }
+
+#analysis-complete-title{
+font-size: 18px;
+font-weight: bold;
+color: black;
+}
+
+#error-number-title{
+font-size: 16px;
+font-weight: normal;
+color: #4C4C4C;
+  }
+
+#congratulatory-title{
+font-size: 16px;
+font-weight: bold;
+color: #CCCC00;
+  position: relative;
+top: 8px;
+}
+
+#disclaimer-title, #error-title{
+font-size: 16px;
+font-weight: bold;
+color: #FF4500;
+  position: relative;
+top: 8px;
+}
+
+/* hr() */
+  .separator{
+    margin: 0;
+  }
+
+.check-button{
+  background-color: #5BC0DE;
+    color: white;
+  font-size: 16px;
+  width: 175px;
+  height: 50px;
+  float: left;
+}
+
+.export-button{
+  background-color: #5BC0DE;
+    color: white;
+  font-size: 16px;
+  width: 160px;
+  height: 75px;
+  float: right;
+  white-space: normal;
+}
+
+
+/* Server side */
+  /* Requirement category in each warning message. */
+  .bold-category{
+    font-weight: bold;
+  }
+
+/* [END] */
