@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-Jedid Ahn, Derek Beaton, Logan Lim, & Jeremy Tanuan, 2021JAN25
+Jedid Ahn, Logan Lim, Jeremy Tanuan, & Derek Beaton 2021JAN25
 
 # Outliers (Shiny) App <img src='etc/logo.png' align="right" height="139"/>
 

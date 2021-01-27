@@ -1,7 +1,7 @@
 README
 ================
 
-Jedid Ahn, Derek Beaton, Logan Lim, & Jeremy Tanuan, 2021JAN25
+Jedid Ahn, Logan Lim, Jeremy Tanuan, & Derek Beaton 2021JAN25
 
 # Outliers (Shiny) App <img src='etc/logo.png' align="right" height="139"/>
 
@@ -18,26 +18,24 @@ see the [OuRS package](https://github.com/derekbeaton/OuRS).
 
 <br>
 
-2.  Download and install the shiny app directly with the following lines
+1.  Download and install the shiny app directly with the following lines
     of code:
 
-<!-- end list -->
+<!-- -->
 
-``` 
-  if (!require("devtools")){
-    install.packages("devtools")
-  }
-  devtools::install_github(repo = "ondri-nibs/outliers_app")
-```
+      if (!require("devtools")){
+        install.packages("devtools")
+      }
+      devtools::install_github(repo = "ondri-nibs/outliers_app")
 
 <br>
 
-3.  Type `ONDRIOutliersApp::installPackages()` to install any missing
+1.  Type `ONDRIOutliersApp::installPackages()` to install any missing
     packages and/or dependencies. If you get the following message in
     your RStudio console, please type 3. <br><br>
     <img src='etc/package-update.png'>
 
 <br>
 
-4.  When installation is complete, type `ONDRIOutliersApp::runApp()` to
+1.  When installation is complete, type `ONDRIOutliersApp::runApp()` to
     open the app.
