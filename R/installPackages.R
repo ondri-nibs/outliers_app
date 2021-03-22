@@ -9,7 +9,7 @@ installPackages <- function(){
   # CRAN packages.
   cranPackages <- c("devtools", "shiny", "shinyFiles", "shinyjs", "plotly", 
                     "rmarkdown", "markdown", "knitr", "corrplot", "pander", 
-                    "abind", "stringr", "viridis", "pheatmap")
+                    "abind", "stringr", "viridis", "pheatmap", "tinytex")
   
   
   
@@ -28,6 +28,12 @@ installPackages <- function(){
   if ("ours" %in% rownames(utils::installed.packages()) == FALSE) {
     Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = TRUE)
     remotes::install_github("derekbeaton/OuRS", subdir = "/OuRS")
+  }
+  
+  
+  # tinytex installation for RMarkdown report generation.
+  if (tinytex::is_tinytex() == FALSE){
+    tinytex::install_tinytex()
   }
 }
 

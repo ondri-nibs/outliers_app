@@ -1,7 +1,7 @@
 README
 ================
-
-Jedid Ahn, Logan Lim, Jeremy Tanuan, & Derek Beaton 2021JAN25
+Jeremy Tanuan, Logan Lim, Jedid Ahn, & Derek Beaton.
+Updated as of March 14, 2021.
 
 # Outliers (Shiny) App <img src='etc/logo.png' align="right" height="139"/>
 
@@ -32,7 +32,7 @@ see the [OuRS package](https://github.com/derekbeaton/OuRS).
     Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = TRUE)
     devtools::install_github("derekbeaton/GSVD")
   }
-  if (!require("ours)){
+  if (!require("ours")){
     Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = TRUE)
     devtools::install_github("derekbeaton/OuRS", subdir = "/OuRS")
   }
